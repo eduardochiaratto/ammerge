@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "580101707295",
+    "firebase_url": "https://mergeam.firebaseio.com",
+    "project_id": "mergeam",
+    "storage_bucket": "mergeam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580101707295:android:6952b696783edd5aa0672a",
+        "android_client_info": {
+          "package_name": "br.com.fiap.mergeam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580101707295-4olibopfdelr5plik7rll3nejh0hc2ao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChpX-d_ov9qGD28UrvCjHqLprCmJrkdQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580101707295-4olibopfdelr5plik7rll3nejh0hc2ao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
