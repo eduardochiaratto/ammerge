@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".RegisterActivity"
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
@@ -21,12 +21,14 @@
         android:id="@+id/editTextUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:errorEnabled="true"
         android:hint="Email desejado aqui!"/>
 
     <EditText
         android:id="@+id/editTextUserPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:errorEnabled="true"
         android:hint="Senha desejada aqui!"/>
 
     <Button

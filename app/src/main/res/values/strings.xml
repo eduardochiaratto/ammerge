@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MergeAM</string>
+    <string name="unexpected_error">Algum erro inesperado aconteceu, por favor tente novamente.</string>
 </resources>

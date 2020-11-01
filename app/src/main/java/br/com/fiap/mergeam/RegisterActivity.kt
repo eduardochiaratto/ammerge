@@ -1,5 +1,6 @@
 package br.com.fiap.mergeam
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +10,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     lateinit var editTextUserName: EditText
     lateinit var editTextUserEmail: EditText
@@ -25,16 +25,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_register)
 
         editTextUserName = findViewById(R.id.editTextUserName)
         editTextUserEmail = findViewById(R.id.editTextUserEmail)
         editTextUserPassword = findViewById(R.id.editTextUserPassword)
         buttonRegister = findViewById(R.id.buttonRegister)
 
-        // Initialize Firebase Auth
-        auth = Firebase.auth
         database = Firebase.database.reference
+        auth = Firebase.auth
 
         buttonRegister.setOnClickListener {
             userRegister()
@@ -47,36 +46,46 @@ class MainActivity : AppCompatActivity() {
         val email = editTextUserEmail.text.toString()
         val password = editTextUserPassword.text.toString()
 
-        // Se o usuario deixar os campos vazios
-        if(email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter text in email/pw",
-                Toast.LENGTH_SHORT).show()
-            return
-        }
+        // Validar se existe campos vazios
+        validateIfEmpty(name, email, password)
 
-        // Criando usuario no Firebase
+        // Criando usuário com Firebase Authentication
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if(it.isSuccessful) {
                     Log.d("Main", "createUserWithEmail: Success")
 
-                    createUserProfileInFirebase(name)
-                } else {
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-                    return@addOnCompleteListener
+                    val uid = auth.currentUser?.uid ?: ""
+                    val email = auth.currentUser?.email ?: ""
+                    createUserProfileInFirebase(uid, name, email)
+
+                    val intent = Intent(this, MenuActivity:: class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
             }
             .addOnFailureListener {
-                Log.d("Main", "Failed to create user: ${it.message}")
+                Log.d("Main", "createUserWithEmailAndPassword: Failed - ${it.message}")
+                Toast.makeText(baseContext, "${it.message}",
+                    Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun createUserProfileInFirebase(name: String) {
-        val uid = auth.uid ?: ""
-
-        val user = User(uid, name)
-
+    private fun createUserProfileInFirebase(uid: String, name: String, email: String) {
+        val user = User(uid, name, email)
         database.child("users").child(uid).setValue(user)
+    }
+
+    private fun validateIfEmpty(name:String, email: String, password: String) {
+        if(name.isEmpty()) {
+            editTextUserName.setError("Preencha este campo")
+            return
+        } else if(email.isEmpty()) {
+            editTextUserEmail.setError("Preencha este campo")
+            return
+        } else if(password.isEmpty()) {
+            editTextUserPassword.setError("Preencha este campo")
+            return
+        }
     }
 }
