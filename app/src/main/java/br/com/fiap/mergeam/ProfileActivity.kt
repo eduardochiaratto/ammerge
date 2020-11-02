@@ -1,10 +1,9 @@
 package br.com.fiap.mergeam
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -15,26 +14,24 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MenuActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
-    lateinit var textViewId: TextView
-    lateinit var textViewName: TextView
-    lateinit var textViewEmail: TextView
-    lateinit var buttonSignOut: Button
-    lateinit var buttonProfile: Button
+    lateinit var editTextUserId: EditText
+    lateinit var editTextUserName: EditText
+    lateinit var editTextUserEmail: EditText
+    lateinit var butonSaveProfile: Button
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu)
+        setContentView(R.layout.activity_profile)
 
-        textViewId = findViewById(R.id.textViewId)
-        textViewName = findViewById(R.id.textViewName)
-        textViewEmail = findViewById(R.id.textViewEmail)
-        buttonSignOut =findViewById(R.id.buttonSignOut)
-        buttonProfile =findViewById(R.id.buttonProfile)
+        editTextUserId = findViewById(R.id.editTextUserId)
+        editTextUserName = findViewById(R.id.editTextUserName)
+        editTextUserEmail = findViewById(R.id.editTextUserEmail)
+        butonSaveProfile = findViewById(R.id.butonSaveProfile)
 
         auth = Firebase.auth
         database = Firebase.database.reference
@@ -47,10 +44,9 @@ class MenuActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d("Main", "CurrentUser DataSnapshot: ${snapshot}")
                 val user = returnUserData(snapshot);
-
-                textViewId.text = user.uid
-                textViewName.text = user.username
-                textViewEmail.text = user.email
+                editTextUserId.setText(user.uid)
+                editTextUserName.setText(user.username)
+                editTextUserEmail.setText(user.email)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -58,31 +54,25 @@ class MenuActivity : AppCompatActivity() {
             }
         })
 
-        buttonProfile.setOnClickListener {
-            val intent = Intent(this, ProfileActivity:: class.java)
-            startActivity(intent)
+        butonSaveProfile.setOnClickListener {
+            val name = editTextUserName.text.toString()
+            val email = editTextUserEmail.text.toString()
+            val uid = currentUser?.uid.toString()
+
+            val user = User(uid, name, email)
+            database.child("users").child(uid).setValue(user)
+
+            currentUser?.updateEmail(email)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        editTextUserEmail.setText(email)
+                    }
+                }
+
+            editTextUserId.setText(uid)
+            editTextUserName.setText(name)
         }
 
-        buttonSignOut.setOnClickListener {
-            auth.signOut()
-            val intent = Intent(this, LoginActivity:: class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val currentUser = auth.currentUser
-        if(currentUser != null) {
-            Log.d("Main", "CurrentUser [LOGADO]!")
-        } else {
-            Log.d("Main", "CurrentUser [DESLOGADO] -> Redirecionado para LogInActivity")
-            val intent = Intent(this, LoginActivity:: class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
     }
 
     private fun returnUserData(snapshot: DataSnapshot): User {

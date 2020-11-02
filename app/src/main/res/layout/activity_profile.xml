@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+
+    <EditText
+        android:id="@+id/editTextUserId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:hint="ID do usuário"/>
+
+    <EditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:hint="Name do usuário"/>
+
+    <EditText
+        android:id="@+id/editTextUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:hint="Email do usuário"/>
+
+    <Button
+        android:id="@+id/butonSaveProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar"/>
+</LinearLayout>
