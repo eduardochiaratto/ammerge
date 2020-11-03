@@ -1,9 +1,11 @@
 package br.com.fiap.mergeam
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,10 +18,10 @@ import com.google.firebase.ktx.Firebase
 
 class ProfileActivity : AppCompatActivity() {
 
-    lateinit var editTextUserId: EditText
     lateinit var editTextUserName: EditText
     lateinit var editTextUserEmail: EditText
-    lateinit var butonSaveProfile: Button
+    lateinit var buttonSaveProfile: Button
+    lateinit var buttonBackMenu: Button
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -28,10 +30,10 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        editTextUserId = findViewById(R.id.editTextUserId)
         editTextUserName = findViewById(R.id.editTextUserName)
         editTextUserEmail = findViewById(R.id.editTextUserEmail)
-        butonSaveProfile = findViewById(R.id.butonSaveProfile)
+        buttonSaveProfile = findViewById(R.id.buttonSaveProfile)
+        buttonBackMenu = findViewById(R.id.buttonBackMenu)
 
         auth = Firebase.auth
         database = Firebase.database.reference
@@ -44,7 +46,6 @@ class ProfileActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d("Main", "CurrentUser DataSnapshot: ${snapshot}")
                 val user = returnUserData(snapshot);
-                editTextUserId.setText(user.uid)
                 editTextUserName.setText(user.username)
                 editTextUserEmail.setText(user.email)
             }
@@ -54,13 +55,12 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
-        butonSaveProfile.setOnClickListener {
-            val name = editTextUserName.text.toString()
+        buttonSaveProfile.setOnClickListener {
+            val username = editTextUserName.text.toString()
             val email = editTextUserEmail.text.toString()
             val uid = currentUser?.uid.toString()
 
-            val user = User(uid, name, email)
-            database.child("users").child(uid).setValue(user)
+            database.child("users").child(uid).child("username").setValue(username)
 
             currentUser?.updateEmail(email)
                 ?.addOnCompleteListener { task ->
@@ -69,18 +69,26 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 }
 
-            editTextUserId.setText(uid)
-            editTextUserName.setText(name)
+            editTextUserName.setText(username)
+
+            Toast.makeText(baseContext, "Salvo com Sucesso!",
+                Toast.LENGTH_SHORT).show()
+        }
+
+        buttonBackMenu.setOnClickListener {
+            val intent = Intent(this, MenuActivity:: class.java)
+            startActivity(intent)
         }
 
     }
 
     private fun returnUserData(snapshot: DataSnapshot): User {
         val username = snapshot.child("username").getValue().toString()
+        val cpf = snapshot.child("cpf").getValue().toString()
         val uid = snapshot.child("uid").getValue().toString()
         val email = snapshot.child("email").getValue().toString()
 
-        val user:User = User(uid, username, email)
+        val user:User = User(uid, username, cpf, email)
         return user
     }
 }

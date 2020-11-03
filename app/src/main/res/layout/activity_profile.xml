@@ -4,19 +4,23 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ProfileActivity"
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center">
 
-
-    <EditText
-        android:id="@+id/editTextUserId"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        android:hint="ID do usuário"/>
+        android:layout_marginBottom="20dp"
+        android:text="Perfil"
+        android:textColor="#000"
+        android:textSize="22sp"/>
 
     <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
         android:id="@+id/editTextUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +28,9 @@
         android:hint="Name do usuário"/>
 
     <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
         android:id="@+id/editTextUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,8 +38,38 @@
         android:hint="Email do usuário"/>
 
     <Button
-        android:id="@+id/butonSaveProfile"
+        android:id="@+id/buttonSaveProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Salvar"/>
+        android:text="Salvar"
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="15dp"
+        android:background="#B10008"
+        android:textColor="#fff"
+        android:ems="12"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
+
+    <Button
+        android:id="@+id/buttonBackMenu"
+        android:text="Voltar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="15dp"
+        android:background="#B10008"
+        android:textColor="#fff"
+        android:ems="12"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"/>
 </LinearLayout>

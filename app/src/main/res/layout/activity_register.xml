@@ -8,33 +8,91 @@
     tools:context=".RegisterActivity"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="#B10008"
     android:gravity="center"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Cadastro"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"/>
+
     <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:id="@+id/editTextUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nome desejado aqui!"/>
+        android:hint="Digite seu nome"/>
 
     <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:id="@+id/editTextUserCPF"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite seu CPF"/>
+
+    <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:id="@+id/editTextUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        android:hint="Email desejado aqui!"/>
+        android:hint="Digite seu e-mail"/>
 
     <EditText
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="20dp"
+        android:ems="18"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:id="@+id/editTextUserPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        android:hint="Senha desejada aqui!"/>
+        android:hint="Digite sua senha"/>
 
     <Button
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="15dp"
+        android:background="#FFFFFF"
+        android:ems="12"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Registrar" />
+
+    <TextView
+        android:id="@+id/buttonBackLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Voltar para a tela de LogIn"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </LinearLayout>

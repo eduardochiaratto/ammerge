@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -16,9 +17,11 @@ import com.google.firebase.ktx.Firebase
 class RegisterActivity : AppCompatActivity() {
 
     lateinit var editTextUserName: EditText
+    lateinit var editTextUserCPF: EditText
     lateinit var editTextUserEmail: EditText
     lateinit var editTextUserPassword: EditText
     lateinit var buttonRegister: Button
+    lateinit var buttonBackLogin: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -28,9 +31,11 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         editTextUserName = findViewById(R.id.editTextUserName)
+        editTextUserCPF = findViewById(R.id.editTextUserCPF)
         editTextUserEmail = findViewById(R.id.editTextUserEmail)
         editTextUserPassword = findViewById(R.id.editTextUserPassword)
         buttonRegister = findViewById(R.id.buttonRegister)
+        buttonBackLogin = findViewById(R.id.buttonBackLogin)
 
         database = Firebase.database.reference
         auth = Firebase.auth
@@ -39,15 +44,35 @@ class RegisterActivity : AppCompatActivity() {
             userRegister()
         }
 
+        buttonBackLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity:: class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun userRegister() {
-        val name = editTextUserName.text.toString()
+        val username = editTextUserName.text.toString()
+        val cpf = editTextUserCPF.text.toString()
         val email = editTextUserEmail.text.toString()
         val password = editTextUserPassword.text.toString()
 
         // Validar se existe campos vazios
-        validateIfEmpty(name, email, password)
+        if(username.isEmpty()) {
+            editTextUserName.setError("Digite um nome")
+            return
+        } else if(cpf.isEmpty()) {
+            editTextUserCPF.setError("Digite um cpf")
+            return
+        } else if(email.isEmpty()) {
+            editTextUserEmail.setError("Digite uma e-mail")
+            return
+        } else if(password.isEmpty()) {
+            editTextUserPassword.setError("Digite uma senha")
+            return
+        }
+
+        validateIfEmpty(username, cpf, email, password)
 
         // Criando usuário com Firebase Authentication
         auth.createUserWithEmailAndPassword(email, password)
@@ -57,7 +82,7 @@ class RegisterActivity : AppCompatActivity() {
 
                     val uid = auth.currentUser?.uid ?: ""
                     val email = auth.currentUser?.email ?: ""
-                    createUserProfileInFirebase(uid, name, email)
+                    createUserProfileInFirebase(uid, username, cpf, email)
 
                     val intent = Intent(this, MenuActivity:: class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -71,21 +96,12 @@ class RegisterActivity : AppCompatActivity() {
             }
     }
 
-    private fun createUserProfileInFirebase(uid: String, name: String, email: String) {
-        val user = User(uid, name, email)
+    private fun createUserProfileInFirebase(uid: String, username: String, cpf: String, email: String) {
+        val user = User(uid, username, cpf, email)
         database.child("users").child(uid).setValue(user)
     }
 
-    private fun validateIfEmpty(name:String, email: String, password: String) {
-        if(name.isEmpty()) {
-            editTextUserName.setError("Preencha este campo")
-            return
-        } else if(email.isEmpty()) {
-            editTextUserEmail.setError("Preencha este campo")
-            return
-        } else if(password.isEmpty()) {
-            editTextUserPassword.setError("Preencha este campo")
-            return
-        }
+    private fun validateIfEmpty(username:String, cpf: String, email: String, password: String) {
+
     }
 }
